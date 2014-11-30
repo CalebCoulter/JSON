@@ -2,13 +2,22 @@
 #define JSONOBJECT_H
 
 
-class JSONobject
+class JSONobject : public JSONVal
 {
+	
     public:
+		void add(std::string name, JSONVal objectVal){
+			names.push_back(name);
+			values.push_back(objectVal);
+		}
+		virtual int type(){
+		// String = 0, object = 1, Array = 2, number = 3, true = 4, false = 5, null = 6
+			return 1;
         JSONobject();
-        virtual ~JSONobject();
-    protected:
+		virtual std::string prettyPrinting(){};
     private:
+	std::vector<std::string*> names;
+	std::vector<JSONVal*> values;
 };
 
 #endif // JSONOBJECT_H
