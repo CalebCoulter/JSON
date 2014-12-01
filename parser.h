@@ -1,6 +1,7 @@
 
-#include "JSONVal.h"
+//#include "JSONVal.h"
 #include <iostream>
+#include<sstream>
 //author Caleb Coulter
 //adds the preceding whitepace
 void processWS(std::stringstream& line)
@@ -10,6 +11,8 @@ void processWS(std::stringstream& line)
         line.get();
     }
 }
+
+
 
 std::string processName(std::stringstream& line)
 {
@@ -29,7 +32,7 @@ std::string processName(std::stringstream& line)
 				thisName += line.get();
 				thisName += line.get();
 				thisName += line.get();
-				thisName += line.get();
+				thisName += line.get();}
             else{
 				thisName += line.get();
 			}
@@ -44,23 +47,24 @@ std::string processName(std::stringstream& line)
     return thisName;
 }
 
-JSONVal* typeChecker(std::stringstream& line, JSONValue value){
+JSONVal * typeChecker(std::stringstream& line, JSONValue value){
 
     //Check for determining formaters
 	if(line.peek() == '{'){
-             val = processObject(line);
+             value = processObject(line);
             }
     else if(line.peek() == '['){
-                val = processArray(line);
+                value = processArray(line);
             }
-    else if line.peek() == '\"'){
+    else if (line.peek() == '\"'){
             value= processString(line);
             }
     else if(std::isdigit(line.peek())){
             value = processNumber(line);
             }
 	else if(line.peek() == '-'){
-			value=processNumber(line)
+			value=processNumber(line);
+	}
     else if(line.peek() == 't'){
             val = processTrue(line);
             }
@@ -71,7 +75,7 @@ JSONVal* typeChecker(std::stringstream& line, JSONValue value){
             value = processNull(line);
             }
     else{
-            value= NULL;
+            return NULL;
             }
 	return value;
          
@@ -80,7 +84,7 @@ JSONVal* typeChecker(std::stringstream& line, JSONValue value){
 //takes a line and processes it as an object; line should start with '{'
 JSONVal* processObject(std::stringstream& line)
 {
-    Object* newObject = new JSONobject();
+    JSONobject* newObject = new JSONobject();
     //grab the opening and trim any whitespace
     if(line.peek() == '{')
         line.get();
@@ -97,15 +101,15 @@ JSONVal* processObject(std::stringstream& line)
         if(line.peek()!='\"')
 			return NULL;//Not an object if it doesnt have a name
         else
-            thisName = processName(line);//process the line until the name is finished
+            valName = processName(line);//process the line until the name is finished
         processWS(line);
         
         if(line.peek() == ':')
         {
 			line.get();
 			processWS(line);
-			objectValue = typeChecker(
-            if(val == NULL){
+			objectVal = typeChecker(line, objectVal);
+            if(objectVal == NULL){
                 return NULL;
             }
             processWS(line);
@@ -114,21 +118,21 @@ JSONVal* processObject(std::stringstream& line)
                 line.get();
 
             processWS(line);
-            thisObject->addName(valName, objectVal);
+           newObject->addName(valName, objectVal);
             
         }
     }
 
     line.get();
     
-    return value;
+    return newObject;
 }
 
 JSONVal* processArray(std::stringstream& line)
 {
     JSONarray* array = new JSONarray();
     if(line.peek()=='['){
-        line.get()
+        line.get();
 		}
 	processWS(line);
         
@@ -145,7 +149,7 @@ JSONVal* processArray(std::stringstream& line)
 		processWS(line);
             
         if(line.peek() == ','){
-            line.get()
+            line.get();
             }
         processWS(line);
             
@@ -180,7 +184,7 @@ JSONVal* processNumber(std::stringstream& line)
         {
            thisNumber += line.get();
         }
-        else if('e'||line.peek()=='E'))
+        else if('e'||line.peek()=='E')
         {
            thisNumber += line.get();
             if(line.peek() == '-'){
@@ -209,7 +213,7 @@ JSONVal* processTrue(std::stringstream& line)
 			else{
 				return NULL;}}
 		else{return NULL;}}
-	else{return NULL;}}
+	else{return NULL;}
 	
         
     JSONVal* tr = new JSONtrue();    
@@ -259,7 +263,7 @@ JSONVal* processNull(std::stringstream& line)
 			else{
 				return NULL;}}
 		else{return NULL;}}
-	else{return NULL;}}
+	else{return NULL;}
 	
         
     JSONVal* nul = new JSONnull();
@@ -268,7 +272,7 @@ JSONVal* processNull(std::stringstream& line)
 }
 
 int main(){
-std::string testString= "{ /"test/" : /"string/" }";
-processObject
+std::string testString= "{ \"test\" : \"string\" }";
+processObject(testString);
 //call processObject on input string
 }

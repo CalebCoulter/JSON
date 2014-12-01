@@ -10,7 +10,7 @@ class JSONVal
 		// String = 0, object = 1, Array = 2, number = 3, true = 4, false = 5, null = 6
 			return 0;
 
-		virtual std::string prettyPrinting(){return NULL;}
+		virtual std::string prettyPrinting(int indent){return NULL;}
     protected:
     private:
 };

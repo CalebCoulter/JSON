@@ -14,7 +14,24 @@ class JSONobject : public JSONVal
 		// String = 0, object = 1, Array = 2, number = 3, true = 4, false = 5, null = 6
 			return 1;
         JSONobject();
-		virtual std::string prettyPrinting(){};
+		virtual std::string prettyPrinting(int indent){
+		std::string pretty="\n";
+		for (int i=0;i<indent;i++){
+			pretty+="\t";
+		}
+		pretty+="{ ";
+		int size=names.size();
+		for (i=0;i<size;i++){
+			pretty+=names.at(i);
+			pretty+=" : ";
+			pretty+= values.at(i).prettyPrinting(indent+1);
+			if(i!=size){
+				pretty+=" , ";
+				}
+			}
+			pretty+=" }";
+			return pretty;
+		};
     private:
 	std::vector<std::string*> names;
 	std::vector<JSONVal*> values;
